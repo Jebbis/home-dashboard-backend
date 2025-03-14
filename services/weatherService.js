@@ -1,0 +1,54 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getTodayWeather = getTodayWeather;
+const axios_1 = __importDefault(require("axios"));
+async function getTodayWeather() {
+    const API_URL = "https://api.openweathermap.org/data/2.5/forecast";
+    const API_KEY = "9d971cd876f3ac606eed5c2b507bad05";
+    const LAT = "60.33150022520558";
+    const LON = "25.053551234292176";
+    const response = await axios_1.default.get(API_URL, {
+        params: { lat: LAT, lon: LON, appid: API_KEY, units: "metric" },
+    });
+    const fullData = response.data.list;
+    const nextDaysForecast = [];
+    function formatDateWithDay(dateStr) {
+        const date = new Date(dateStr);
+        return `${new Intl.DateTimeFormat("fi-FI", {
+            weekday: "short",
+        }).format(date)}`;
+    }
+    for (let i = 1; i <= 4; i++) {
+        const date = new Date();
+        date.setDate(date.getDate() + i);
+        const dateStr = date.toISOString().split("T")[0];
+        const dailyData = fullData.filter((entry) => entry.dt_txt.startsWith(dateStr));
+        if (dailyData.length > 0) {
+            const tempMin = Math.min(...dailyData.map((entry) => entry.main.temp_min));
+            const tempMax = Math.max(...dailyData.map((entry) => entry.main.temp_max));
+            nextDaysForecast.push({
+                date: i === 1 ? dateStr : formatDateWithDay(dateStr),
+                temp_min: Math.round(tempMin),
+                temp_max: Math.round(tempMax),
+            });
+        }
+    }
+    // Extract detailed temp data for tomorrow
+    const tomorrowData = nextDaysForecast[0];
+    const tempDataPoints = fullData
+        .filter((entry) => entry.dt_txt.startsWith(tomorrowData.date))
+        .map((entry) => ({
+        temp: Math.round(entry.main.temp),
+        time: entry.dt_txt.split(" ")[1].slice(0, 2), // Extracts "HH"
+    }));
+    return {
+        date: tomorrowData.date,
+        temp_min: tomorrowData.temp_min,
+        temp_max: tomorrowData.temp_max,
+        temp_data_points: tempDataPoints,
+        nextDaysForecast,
+    };
+}

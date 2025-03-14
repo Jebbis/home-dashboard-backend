@@ -1,0 +1,27 @@
+{
+  "name": "home-dashboard-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@apollo/server": "^4.11.3",
+    "@fastify/cors": "^10.1.0",
+    "@fastify/env": "^5.0.2",
+    "@types/node": "^22.13.5",
+    "axios": "^1.7.9",
+    "dayjs": "^1.11.13",
+    "dotenv": "^16.4.7",
+    "fastify": "^5.2.1",
+    "mercurius": "^16.1.0"
+  },
+  "devDependencies": {
+    "@tsconfig/node20": "^20.1.4"
+  }
+}
