@@ -1,12 +1,9 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = default_1;
-const hueService_1 = require("../services/hueService");
-async function default_1(fastify) {
+import { fetchLightState, toggleLightState, toggleLightBrightness, } from "../services/hueService.js";
+export default async function (fastify) {
     fastify.get("/hue/lights/:lightId", async (request, reply) => {
         const { lightId } = request.params;
         try {
-            const data = await (0, hueService_1.fetchLightState)(lightId);
+            const data = await fetchLightState(lightId);
             return reply.send(data);
         }
         catch (error) {
@@ -16,7 +13,7 @@ async function default_1(fastify) {
     fastify.put("/hue/lights/:lightId/state", async (request, reply) => {
         const { lightId } = request.params;
         try {
-            const updatedState = await (0, hueService_1.toggleLightState)(lightId);
+            const updatedState = await toggleLightState(lightId);
             return reply.send(updatedState);
         }
         catch (error) {
@@ -26,7 +23,7 @@ async function default_1(fastify) {
     fastify.put("/hue/lights/:lightId/brightness/:bri", async (request, reply) => {
         const { lightId, bri } = request.params;
         try {
-            const updatedState = await (0, hueService_1.toggleLightBrightness)(lightId, bri);
+            const updatedState = await toggleLightBrightness(lightId, bri);
             return reply.send(updatedState);
         }
         catch (error) {

@@ -2,12 +2,11 @@ import Fastify from "fastify";
 import cors from "@fastify/cors";
 import dotenv from "dotenv";
 import fastifyEnv from "@fastify/env";
-import mercurius from "mercurius";
 
-import hslRoutes from "./routes/hsl";
-import hueRoutes from "./routes/hue";
-import porssisahkoRoutes from "./routes/porssisahko";
-import weatherRoutes from "./routes/weather";
+import hslRoutes from "./routes/hsl.js";
+import hueRoutes from "./routes/hue.js";
+import porssisahkoRoutes from "./routes/porssisahko.js";
+import weatherRoutes from "./routes/weather.js";
 
 // Load environment variables from .env
 dotenv.config();
@@ -30,10 +29,6 @@ fastify.register(fastifyEnv, { schema: envSchema }).ready((err) => {
     console.error("❌ Failed to load environment variables:", err);
     process.exit(1);
   }
-
-  console.log("✅ Environment variables loaded:");
-  console.log("Bridge ID:", process.env.HUE_BRIDGE_ID);
-  console.log("Bridge IP:", process.env.HUE_BRIDGE_IP);
 });
 
 // Enable CORS
@@ -43,12 +38,6 @@ fastify.register(cors, {
   allowedHeaders: ["Content-Type"],
 });
 
-// Register the GraphQL plugin
-fastify.register(mercurius, {
-  schema,
-  resolvers,
-  graphiql: "playground",
-});
 // Register routes
 fastify.register(hslRoutes);
 fastify.register(hueRoutes);

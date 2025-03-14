@@ -1,10 +1,12 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = default_1;
-const hslService_1 = require("../services/hslService");
-async function default_1(fastify) {
-    fastify.get("/hsl-data", async (request, reply) => {
-        const data = await (0, hslService_1.fetchGraphQL)();
-        return reply.send(data);
+import { fetchBusArrivals } from "../services/hslService.js";
+export default async function hslRoutes(fastify) {
+    fastify.get("/bus/:stopId", async (request, reply) => {
+        const { stopId } = request.params;
+        console.log("eka");
+        const stopData = await fetchBusArrivals(stopId);
+        if (!stopData) {
+            return reply.status(500).send({ error: "Failed to fetch bus data" });
+        }
+        return reply.send(stopData);
     });
 }

@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-import { getTodayWeather } from "../services/weatherService";
+import { getTodayWeather } from "../services/weatherService.js";
 
 export default async function (fastify: FastifyInstance) {
   fastify.get("/weather/today", async (request, reply) => {

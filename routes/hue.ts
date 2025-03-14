@@ -3,7 +3,7 @@ import {
   fetchLightState,
   toggleLightState,
   toggleLightBrightness,
-} from "../services/hueService";
+} from "../services/hueService.js";
 
 export default async function (fastify: FastifyInstance) {
   fastify.get("/hue/lights/:lightId", async (request, reply) => {

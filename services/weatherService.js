@@ -1,16 +1,10 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getTodayWeather = getTodayWeather;
-const axios_1 = __importDefault(require("axios"));
-async function getTodayWeather() {
+import axios from "axios";
+export async function getTodayWeather() {
     const API_URL = "https://api.openweathermap.org/data/2.5/forecast";
     const API_KEY = "9d971cd876f3ac606eed5c2b507bad05";
     const LAT = "60.33150022520558";
     const LON = "25.053551234292176";
-    const response = await axios_1.default.get(API_URL, {
+    const response = await axios.get(API_URL, {
         params: { lat: LAT, lon: LON, appid: API_KEY, units: "metric" },
     });
     const fullData = response.data.list;
