@@ -1,5 +1,6 @@
 import axios from "axios";
 import dotenv from "dotenv";
+
 dotenv.config();
 
 const bridgeId = process.env.HUE_BRIDGE_ID;

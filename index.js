@@ -6,6 +6,7 @@ import hslRoutes from "./routes/hsl.js";
 import hueRoutes from "./routes/hue.js";
 import porssisahkoRoutes from "./routes/porssisahko.js";
 import weatherRoutes from "./routes/weather.js";
+import timeToWorkRoutes from "./routes/timeToWork.js";
 // Load environment variables from .env
 dotenv.config();
 const fastify = Fastify({ logger: true });
@@ -36,6 +37,7 @@ fastify.register(hslRoutes);
 fastify.register(hueRoutes);
 fastify.register(porssisahkoRoutes);
 fastify.register(weatherRoutes);
+fastify.register(timeToWorkRoutes);
 // Start server
 const start = async () => {
     try {

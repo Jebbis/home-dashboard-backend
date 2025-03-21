@@ -1,8 +1,11 @@
 import axios from "axios";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export async function getTodayWeather() {
   const API_URL = "https://api.openweathermap.org/data/2.5/forecast";
-  const API_KEY = "9d971cd876f3ac606eed5c2b507bad05";
+  const API_KEY = process.env.WEATHER_KEY;
   const LAT = "60.33150022520558";
   const LON = "25.053551234292176";
 
