@@ -24,13 +24,21 @@ export async function getTodayWeather() {
     }).format(date)}`;
   }
 
+  //Loop results and make a dataset for current day + next 3
   for (let i = 1; i <= 4; i++) {
     const date = new Date();
     date.setDate(date.getDate() + i);
     const dateStr = date.toISOString().split("T")[0];
 
-    const dailyData = fullData.filter((entry: any) =>
-      entry.dt_txt.startsWith(dateStr)
+    const nextDate = new Date(date);
+    nextDate.setDate(nextDate.getDate() + 1);
+    const dateStrNext = nextDate.toISOString().split("T")[0];
+
+    const dailyData = fullData.filter(
+      (entry: any) =>
+        entry.dt_txt.startsWith(dateStr) ||
+        (entry.dt_txt.startsWith(dateStrNext) &&
+          entry.dt_txt.endsWith("00:00:00"))
     );
 
     if (dailyData.length > 0) {
@@ -52,8 +60,17 @@ export async function getTodayWeather() {
   // Extract detailed temp data for tomorrow
   const tomorrowData = nextDaysForecast[0];
 
+  const nextDate = new Date(tomorrowData.date);
+  nextDate.setDate(nextDate.getDate() + 1);
+  const dateStrNext = nextDate.toISOString().split("T")[0];
+
   const tempDataPoints = fullData
-    .filter((entry: any) => entry.dt_txt.startsWith(tomorrowData.date))
+    .filter(
+      (entry: any) =>
+        entry.dt_txt.startsWith(tomorrowData.date) ||
+        (entry.dt_txt.startsWith(dateStrNext) &&
+          entry.dt_txt.endsWith("00:00:00"))
+    )
     .map((entry: any) => ({
       temp: Math.round(entry.main.temp),
       time: entry.dt_txt.split(" ")[1].slice(0, 2), // Extracts "HH"

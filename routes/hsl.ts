@@ -1,5 +1,11 @@
 import { FastifyInstance } from "fastify";
-import { fetchBusArrivals } from "../services/hslService.js";
+import {
+  fetchBusArrivals,
+  fetchTimeToDestination,
+} from "../services/hslService.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export default async function hslRoutes(fastify: FastifyInstance) {
   fastify.get("/bus/:stopId", async (request, reply) => {
@@ -11,5 +17,30 @@ export default async function hslRoutes(fastify: FastifyInstance) {
     }
 
     return reply.send(stopData);
+  });
+
+  fastify.get("/timeToDestination/:id", async (request, reply) => {
+    const { id } = request.params as { id: string };
+
+    const latitude =
+      id === "1"
+        ? Number(process.env.END_LOC_1_LAT)
+        : Number(process.env.END_LOC_2_LAT);
+    const longitude =
+      id === "1"
+        ? Number(process.env.END_LOC_1_LON)
+        : Number(process.env.END_LOC_2_LON);
+
+    const timeToDestinationData = await fetchTimeToDestination(
+      latitude,
+      longitude
+    );
+    if (!timeToDestinationData) {
+      return reply
+        .status(500)
+        .send({ error: "Failed to time to destination data" });
+    }
+
+    return reply.send(timeToDestinationData);
   });
 }
